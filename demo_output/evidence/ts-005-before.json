@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "captured_at": "2026-10-28T10:00:00Z",
+  "tasks": [
+    {
+      "task_id": "TB-100",
+      "title": "Before import",
+      "priority": "medium",
+      "due_date": "2026-11-03"
+    }
+  ]
+}

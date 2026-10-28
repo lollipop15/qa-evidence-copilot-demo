@@ -1,0 +1,23 @@
+{
+  "synthetic": true,
+  "preview_checksum": "demo-checksum-001",
+  "accepted": [
+    {
+      "row": 2,
+      "task_id": "TB-200",
+      "title": "New valid task",
+      "priority": "low",
+      "due_date": "2026-11-05"
+    }
+  ],
+  "rejected": [
+    {
+      "row": 3,
+      "task_id": "TB-100",
+      "title": "Invalid priority",
+      "priority": "urgent",
+      "due_date": "2026-11-06",
+      "reason": "priority must be low, medium, or high"
+    }
+  ]
+}
