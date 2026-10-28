@@ -1,66 +1,66 @@
 # Evidence-First QA Copilot
 
-> Публичный clean-room пример авторского AI-скилла для QA. Продуктовые сущности, требования, test data и synthetic QA result вымышлены; [validation note](validation/skill_evaluation.md) отдельно описывает ограниченную фактическую проверку инструкции на synthetic prompt.
+> A public, clean-room example of an original AI skill for QA. All product entities, requirements, test data, and the synthetic QA result are fictional. The [validation note](validation/skill_evaluation.md) separately documents a limited, real evaluation of the skill instruction against a synthetic prompt.
 
-## Что это даёт
+## What it does
 
-Это не «промпт, который пишет тест-кейсы». Скилл превращает изменение продукта в управляемую цепочку:
+This is not “a prompt that writes test cases.” The skill turns a product change into a controlled workflow:
 
-`требования → проверяемый контракт → риск-план → evidence → QA-вердикт`
+`requirements → verifiable contract → risk-based plan → evidence → QA verdict`
 
-Он автоматизирует рутинную аналитическую работу QA-инженера: собирает контекст, нумерует проверяемые контракты, строит матрицу рисков и сценариев, напоминает об oracle и формирует воспроизводимый отчёт. Решение о продукте, приоритетах и финальном качестве остаётся за человеком.
+It streamlines routine QA analysis: gathering context, numbering verifiable contracts, building a risk-and-scenario matrix, prompting for an independent test oracle, and producing a reproducible report. Product decisions, priorities, and final quality approval remain with a human.
 
-## Если HR читает только один экран
+## If HR reads only one screen
 
-| Вопрос | Короткий ответ |
+| Question | Short answer |
 | --- | --- |
-| Какую проблему решает | При жёстком сроке AI легко выдаёт длинный, но основанный на догадках список проверок. Такой план не доказывает качество. |
-| Что сделала автор | Задала AI строгий QA-workflow: он сначала уточняет, что именно нужно считать правильным, затем связывает проверки с доказательствами. |
-| Что видно в демо | На неоднозначном требовании skill останавливается, а на согласованном — строит трассируемый план и честно фиксирует найденный риск. |
-| Какой эффект для команды | Меньше ручной рутины и пропусков; быстрее подготовка QA-артефактов; понятнее, что доказано, а что ещё требует решения. |
+| What problem does it solve? | Under deadline pressure, an LLM can produce a long but assumption-driven test list. That plan does not demonstrate quality. |
+| What did the author create? | A strict QA workflow that first establishes what “correct” means, then links coverage to observable evidence. |
+| What does the demo show? | On an ambiguous requirement, the skill stops and asks for a product decision. On an agreed requirement, it creates a traceable plan and an honest synthetic defect report. |
+| What is the team impact? | Less manual QA administration and fewer blind spots; faster preparation of QA artifacts; clearer separation between what is proven and what still needs a decision. |
 
-## За 3 минуты для HR
+## A three-minute HR walkthrough
 
-1. Откройте [SKILL.md](SKILL.md): ключевое правило — `Passed` нельзя ставить без наблюдаемого доказательства.
-2. Покажите [неоднозначный brief](demo_case/ambiguous_brief.md) и [контекст, который блокирует догадку](demo_output/blocked_context.md). Это важнее, чем длинный список тестов: AI не подменяет решение владельца продукта.
-3. Затем откройте [согласованный brief](demo_case/feature_brief.md), [risk-based test plan](demo_output/risk_based_test_plan.md) и [evidence-backed QA result](demo_output/qa_result.md).
-4. Завершите фразой: «Моя ценность не в том, чтобы попросить модель написать тест-кейсы, а в том, чтобы сделать её дисциплинированным QA-ассистентом, чьи выводы можно проверить».
+1. Open [SKILL.md](SKILL.md): its key rule is that a scenario cannot be marked `Passed` without observable evidence.
+2. Show the [ambiguous brief](demo_case/ambiguous_brief.md) and the [context that prevents a guess](demo_output/blocked_context.md). This matters more than a long test list: the AI does not replace the product owner’s decision.
+3. Then open the [agreed brief](demo_case/feature_brief.md), [risk-based test plan](demo_output/risk_based_test_plan.md), and [evidence-backed QA result](demo_output/qa_result.md).
+4. End with: “My value is not asking a model to write test cases. It is making the model a disciplined QA assistant whose conclusions can be inspected and verified.”
 
-### Мини-глоссарий
+### Mini glossary
 
-- **Контракт** — одно конкретное правило, которое можно проверить, например: «ошибочный файл ничего не сохраняет».
-- **Evidence** — наблюдаемый артефакт проверки: снимок данных, файл, ответ операции или скриншот.
-- **Oracle** — независимый способ понять, каким должен быть результат; он не должен просто повторять ответ проверяемой системы.
-- **Атомарный импорт** — либо сохраняется весь валидный файл, либо при ошибке не меняется ничего.
+- **Contract** — one specific rule that can be tested, for example: “an invalid file persists nothing.”
+- **Evidence** — an observable test artifact: a data snapshot, file, operation response, or screenshot.
+- **Oracle** — an independent way to determine the expected result; it must not merely repeat the response from the system under test.
+- **Atomic import** — either the entire valid file is persisted, or nothing changes when an error occurs.
 
-## Питч на 60 секунд
+## 60-second pitch
 
-> Я создала Evidence-First QA Copilot — AI-скилл для повторяющихся QA-задач. Он берёт краткое описание изменения и не ограничивается генерацией тест-кейсов: сначала превращает требования в атомарный проверяемый контракт, затем строит риск-ориентированный план с негативными, граничными и кросс-слойными сценариями. После выполнения он собирает доказательства — снимки данных, ответы API, скриншоты, результаты экспорта — в единый QA-отчёт.
+> I created Evidence-First QA Copilot, an AI skill for recurring QA work. It starts with a short change description but does more than generate test cases: it turns requirements into atomic, verifiable contracts and then creates a risk-based plan with negative, boundary, stateful, and cross-layer scenarios. When execution is available, it brings snapshots, API responses, screenshots, and export results together in a single QA report.
 >
-> Главное правило: если нет источника ожидаемого поведения или доказательства выполнения, скилл не имитирует уверенность. Он фиксирует `Needs answers`, `Blocked` или `Not executed`. Это ускоряет рутину, делает покрытие прозрачным и не даёт принять план за результат тестирования. AI помогает QA-инженеру мыслить системно, но не заменяет его профессиональное решение.
+> Its central rule is simple: if the expected behavior has no authoritative source, or execution has no observable evidence, the skill does not simulate confidence. It records `Needs answers`, `Blocked`, or `Not executed`. This reduces routine work, makes coverage transparent, and prevents a test plan from being mistaken for a testing result. AI helps the QA engineer think systematically; it does not replace professional judgment.
 
-## Чем отличается от обычного запроса к LLM
+## How it differs from a typical LLM prompt
 
-| Обычный запрос | Evidence-First QA Copilot |
+| Typical prompt | Evidence-First QA Copilot |
 | --- | --- |
-| Разовый список тестов | Повторяемый workflow с входами, выходами и quality gates |
-| Модель может выбрать трактовку сама | Материальная неоднозначность становится вопросом и блокировкой |
-| «Похоже, всё хорошо» | Каждый `Passed` привязан к конкретному evidence |
-| Фокус на happy path | Риски: границы, негативные сценарии, состояния, повторы, права, данные и экспорт |
-| QA-вывод в свободной форме | Контракт → сценарий → доказательство → статус / defect |
+| One-off test list | Reusable workflow with inputs, outputs, and quality gates |
+| The model can select its own interpretation | Material ambiguity becomes a question and a blocker |
+| “It looks fine” | Every `Passed` status is linked to specific evidence |
+| Focus on the happy path | Risks include boundaries, negative scenarios, states, retries, permissions, data, and export |
+| Free-form QA conclusion | Contract → scenario → evidence → status / defect |
 
-## Что в пакете
+## What is in the package
 
-| Материал | Зачем нужен |
+| Asset | Purpose |
 | --- | --- |
-| [SKILL.md](SKILL.md) | Портативная инструкция для совместимого AI-агента |
-| [feature_brief.md](demo_case/feature_brief.md) | Полностью определённая учебная функция: импорт CSV-задач |
-| [ambiguous_brief.md](demo_case/ambiguous_brief.md) | Кейс, в котором хороший QA-агент обязан остановиться и запросить решение |
-| [qa_context.md](demo_output/qa_context.md) | Атомарный контракт и карта рисков |
-| [risk_based_test_plan.md](demo_output/risk_based_test_plan.md) | Трассируемый набор сценариев и независимых oracle |
-| [qa_result.md](demo_output/qa_result.md) | Пример честного отчёта с synthetic evidence и defect draft |
-| [skill_evaluation.md](validation/skill_evaluation.md) | Как проверялась дисциплина самого skill |
+| [SKILL.md](SKILL.md) | Portable instructions for a compatible AI agent |
+| [feature_brief.md](demo_case/feature_brief.md) | A fully specified synthetic feature: CSV task import |
+| [ambiguous_brief.md](demo_case/ambiguous_brief.md) | A case where a good QA agent must stop and ask for a decision |
+| [qa_context.md](demo_output/qa_context.md) | Verifiable contract ledger and risk map |
+| [risk_based_test_plan.md](demo_output/risk_based_test_plan.md) | Traceable scenarios and independent test oracles |
+| [qa_result.md](demo_output/qa_result.md) | An honest report with synthetic evidence and a defect draft |
+| [skill_evaluation.md](validation/skill_evaluation.md) | How the skill’s own discipline was evaluated |
 
-## Границы примера
+## Scope of this example
 
-Смотрите [PUBLIC_DEMO.md](PUBLIC_DEMO.md). Здесь нет коммерческого кода, проектной терминологии, данных пользователей, URL окружений, ключей, скриншотов или реальных дефектов.
+See [PUBLIC_DEMO.md](PUBLIC_DEMO.md). This package contains no commercial code, project terminology, user data, environment URLs, keys, screenshots, or real defects.

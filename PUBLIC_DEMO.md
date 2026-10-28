@@ -1,12 +1,12 @@
 # Public demo statement
 
-Этот пакет создан как самостоятельный учебный пример для портфолио.
+This package is a standalone, fictional portfolio example.
 
-- Все продуктовые названия, данные, требования и synthetic defect case в `demo_case/` и `demo_output/` вымышлены.
-- Здесь нет кода, документации, клиентских данных или артефактов действующих проектов.
-- Synthetic evidence показывает форму доказательного QA-отчёта; оно не является результатом запуска реальной системы и не описывает реальный дефект.
-- [validation/skill_evaluation.md](validation/skill_evaluation.md) описывает ограниченный фактический prompt-evaluation самого skill на synthetic brief. Это не benchmark, не продуктовое тестирование и не содержит материалов проектов.
-- Пакет не обращается к сети, API, базам данных или внешним сервисам.
-- При демонстрации можно показывать файлы целиком: они рассчитаны на публичное обсуждение.
+- All product names, data, requirements, and the synthetic defect case in `demo_case/` and `demo_output/` are fictional.
+- It contains no commercial code, project documentation, customer data, or artifacts from active projects.
+- Synthetic evidence illustrates the form of an evidence-backed QA report; it is not output from a real system and does not describe a real defect.
+- [validation/skill_evaluation.md](validation/skill_evaluation.md) documents a limited, real prompt evaluation of the skill against a synthetic brief. It is not a benchmark, product testing, or project material.
+- The package itself makes no network, API, database, or external-service calls.
+- The files may be shown in full during a public demonstration.
 
-Авторский вклад, который демонстрируется здесь: методика «контекст → контракт → риск-план → доказательства → вердикт», правила остановки при неоднозначности и безопасная дисциплина работы с QA-данными.
+The author’s contribution demonstrated here is the workflow “context → contract → risk-based plan → evidence → verdict”, its hard-stop rules for ambiguity, and safe discipline for handling QA data.

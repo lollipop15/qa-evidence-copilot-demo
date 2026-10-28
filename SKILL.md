@@ -5,46 +5,46 @@ description: Use when a feature brief, pull request, bugfix, import/export flow,
 
 # Evidence-First QA Copilot
 
-## Идея
+## Core idea
 
-Скилл превращает разрозненное описание изменения в проверяемый QA-процесс. Его правило: у каждого ожидаемого результата есть источник, а у каждого статуса `Passed` — наблюдаемое доказательство. Если доказательства или решения нет, это не успех: укажи `Needs answers`, `Blocked` или `Not executed`.
+This skill turns scattered change descriptions into a verifiable QA workflow. Its rule is simple: every expected result must have a source, and every `Passed` status must have observable evidence. If either the decision or the evidence is missing, do not call the outcome a success; use `Needs answers`, `Blocked`, or `Not executed`.
 
-Используй его для feature QA, регрессии, API/UI-потоков, импорта и экспорта. Не используй как замену исследованию безопасности, нагрузочному тестированию или финальному решению QA-инженера.
+Use it for feature QA, regression, API/UI flows, and import/export workflows. Do not use it as a substitute for security research, load testing, or a QA engineer’s final judgment.
 
-## Жёсткий стоп для неопределённости
+## Hard stop for ambiguity
 
-Если хотя бы одно материальное правило меняет ожидаемый результат, oracle, допустимое состояние, права, побочный эффект или вердикт, закончи ответ после **одного** `QA Context Brief` со статусом `Needs answers` и нумерованными вопросами. Не добавляй test plan, тест-кейсы, сценарии выполнения или условный `Go`.
+If any unresolved material rule would change the expected result, test oracle, permitted state, authorization, side effect, or release verdict, stop after exactly one `QA Context Brief` with `Status: Needs answers` and numbered questions. Do not add a test plan, test cases, execution scenarios, or a conditional `Go`.
 
-Это правило действует, даже когда пользователь просит «план прямо сейчас», «не задавай вопросов» или «релиз сегодня». Срочность не превращает отсутствующее решение в требование. Разрешены только: краткое `Blocked` / `No-Go`, риск и точное действие, которое снимет блокировку.
+This rule still applies when the user says “I need a plan now”, “do not ask questions”, or “the release is today”. Urgency does not turn a missing decision into a requirement. The only permitted additions are a short `Blocked` / `No-Go` status, the risk, and the precise action that will remove the blocker.
 
-## Выбери режим
+## Choose a mode
 
-| Запрос | Режим и результат |
+| Request | Mode and output |
 | --- | --- |
-| Требования неполны, противоречивы или разбросаны | `context`: QA Context Brief |
-| Нужен набор проверок до запуска тестов, а контекст готов | `plan`: Risk-Based Test Plan |
-| Проверки уже выполнены или их нужно выполнить | `execute` / `report`: QA Result |
-| Известен дефект | `defect`: воспроизводимый bug report |
+| Requirements are incomplete, contradictory, or fragmented | `context`: QA Context Brief |
+| Test coverage is needed before execution and the context is ready | `plan`: Risk-Based Test Plan |
+| Tests need to be executed or execution evidence needs reporting | `execute` / `report`: QA Result |
+| A defect is already known | `defect`: reproducible defect report |
 
-Начинай с `context`, если пользователь явно не дал актуальный, согласованный тест-план. Переходи к `plan` только при `Readiness: Ready for plan` или после явного принятия пользователем перечисленных unknowns как execution gates.
+Start with `context` unless the user has explicitly supplied a current, agreed test plan. Move to `plan` only with `Readiness: Ready for plan` or after the user explicitly accepts the listed unknowns as execution gates.
 
-## Рабочий цикл
+## Workflow
 
-1. Собери источники: последний feature brief, acceptance criteria, решения команды, код/дифф, существующие тесты и примеры. Не считай один документ единственной истиной, если доступно больше данных.
-2. Выпиши атомарные контракты `BC-001…`: ожидаемое поведение, источник, вход/состояние и затронутые поверхности (UI, API, данные, экспорт, фоновые эффекты).
-3. Если источник не определяет важное правило — например, атомарность импорта, допустимое обновление, права или конфликт устаревшего preview — задай один точный вопрос и поставь план на паузу. Не выбирай поведение молча.
-4. Построй сценарии `TS-001…` с трассировкой к контракту: happy path, негативный класс, границы, состояния, повтор/идемпотентность, права, кросс-слойные эффекты и локализация — только там, где это применимо.
-5. Для каждого сценария укажи независимый oracle, контролируемые данные, ожидаемый результат, запрещённые побочные эффекты, способ проверки и артефакт доказательства.
-6. В отчёте сохрани связь контракт → сценарий → доказательство. Разделяй `Passed`, `Failed`, `Blocked`, `Not executed` и `Not applicable`; не сворачивай их в общий оптимистичный текст.
+1. Gather sources: the latest feature brief, acceptance criteria, team decisions, code or diff, existing tests, and examples. Do not treat one document as the sole source of truth when more evidence is available.
+2. Record atomic contracts `BC-001…`: expected behavior, source, input or state, and affected surfaces such as UI, API, data, export, and background effects.
+3. If a source does not define an important rule — for example import atomicity, allowed updates, permissions, or a stale-preview conflict — ask a precise question and pause planning. Never choose behavior silently.
+4. Create traceable scenarios `TS-001…`: happy path, negative class, boundaries, states, retries/idempotency, permissions, cross-layer effects, and localization, where applicable.
+5. For every scenario, state an independent test oracle, controlled data, expected result, prohibited side effects, verification method, and evidence artifact.
+6. Preserve the chain contract → scenario → evidence in the report. Distinguish `Passed`, `Failed`, `Blocked`, `Not executed`, and `Not applicable`; do not collapse them into optimistic prose.
 
-## Границы безопасности
+## Safety boundaries
 
-- Не изменяй production-данные и не запускай destructive-проверки без явного разрешения пользователя.
-- Перед изменением данных проверь изолированную QA-цель, план rollback/cleanup и источник test data.
-- Не помещай в QA-артефакты секреты, персональные данные, токены или внутренние URL.
-- Не называй релиз готовым только потому, что план написан: статус `Pass` требует результатов выполнения и доказательств.
+- Do not mutate production data or run destructive checks without explicit user authorization.
+- Before changing data, verify an isolated QA target, a rollback/cleanup plan, and the source of test data.
+- Do not place secrets, personal data, tokens, or internal URLs in QA artifacts.
+- Do not call a release ready merely because a plan exists: a `Pass` requires execution results and evidence.
 
-## Минимальные структуры артефактов
+## Minimum artifact structures
 
 ### QA Context Brief
 
@@ -55,22 +55,24 @@ description: Use when a feature brief, pull request, bugfix, import/export flow,
 | Scenario | Contract | Risk | Preconditions/data | Action | Expected result + source | Oracle/evidence | Cleanup |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
-Добавь короткую матрицу покрытия: контракты, негативные/граничные случаи, состояния, кросс-слойные эффекты и остаточные риски.
+Add a compact coverage matrix for contracts, negative and boundary cases, states, cross-layer effects, and residual risks.
 
 ### QA Result
 
-`Pass` / `Fail` / `Blocked` · краткое резюме · матрица статусов по сценариям · ссылки на evidence · defects · непроверенные зоны и следующий шаг.
+Overall verdict: `Pass` / `Fail` / `Blocked` · executive summary · scenario status matrix · evidence links · defects · untested areas and next step.
 
-## Частые ошибки
+Scenario statuses: `Passed` / `Failed` / `Blocked` / `Not executed` / `Not applicable`.
 
-| Ошибка | Что делать вместо неё |
+## Common mistakes
+
+| Mistake | Do this instead |
 | --- | --- |
-| Модель додумала неоднозначное бизнес-правило | Зафиксируй вопрос и не выдавай догадку за expected result. |
-| План проверяет только форму или HTTP 200 | Добавь данные, состояние, побочные эффекты и пользовательский результат. |
-| Повторный запрос/двойной клик не проверен | Добавь сценарий идемпотентности и проверь конечное состояние. |
-| `Passed` основан на чтении кода или плане | Используй `Not executed`, пока нет выполнения и evidence. |
-| Негативная проверка меняет рабочие данные | Используй изолированное окружение и документируй cleanup. |
+| The model invents an ambiguous business rule | Record the question and do not present an assumption as an expected result. |
+| The plan checks only form or HTTP 200 | Add data, state, side effects, and the user-visible result. |
+| A repeated request or double-click is not checked | Add an idempotency scenario and verify the final state. |
+| `Passed` is based on reading code or a plan | Use `Not executed` until execution and evidence exist. |
+| A negative check changes working data | Use an isolated environment and document cleanup. |
 
-## Короткий пример
+## Short example
 
-В [демо-кейсе CSV-импорта задач](demo_case/feature_brief.md) правило «файл с невалидной строкой не меняет сохранённые задачи» недостаточно определяет поведение смешанного файла. Скилл сначала фиксирует этот вопрос в контексте, а не изобретает частичное сохранение. После решения создаётся сценарий, который сравнивает снимок задач до и после подтверждения импорта и сохраняет это сравнение как evidence.
+In the [task CSV-import demo](demo_case/ambiguous_brief.md), a brief can say that invalid rows do not change existing data without defining what should happen to a mixed valid/invalid file. The skill records that as a context question rather than assuming partial persistence. Once the decision is documented in the [resolved brief](demo_case/feature_brief.md), it creates a scenario that compares normalized task snapshots before and after import confirmation and retains that comparison as evidence.
