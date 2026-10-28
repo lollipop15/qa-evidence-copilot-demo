@@ -1,19 +1,19 @@
-# Учебный brief: импорт задач из CSV — намеренно неполный
+# Synthetic brief: CSV task import — intentionally incomplete
 
-Менеджер загружает CSV с колонками `task_id`, `title`, `priority`, `due_date`.
+A manager uploads a CSV with the columns `task_id`, `title`, `priority`, and `due_date`.
 
-Preview показывает строки как `accepted` или `rejected`. После `Confirm` задачи создаются или обновляются; `Export` скачивает текущие задачи.
+`Preview` classifies rows as `accepted` or `rejected`. After `Confirm`, tasks are created or updated; `Export` downloads the current task set.
 
-- `task_id` и `title` обязательны.
-- `priority` допускает `low`, `medium`, `high`.
-- `due_date` имеет формат `YYYY-MM-DD` и не может быть больше чем на 365 дней вперёд.
-- Повторный импорт не создаёт дубликаты.
-- Невалидные строки не меняют существующие данные.
-- `Confirm` доступен только роли manager.
-- Интерфейс поддерживает English и Russian.
+- `task_id` and `title` are required.
+- `priority` accepts `low`, `medium`, and `high`.
+- `due_date` uses `YYYY-MM-DD` and cannot be more than 365 days in the future.
+- Re-importing data does not create duplicates.
+- Invalid rows do not change existing data.
+- `Confirm` is available only to the `manager` role.
+- The interface supports English and Russian.
 
-## Почему brief намеренно оставлен неоднозначным
+## Why this brief is deliberately ambiguous
 
-Не указано, что должен делать `Confirm`, если в одном файле есть и валидные, и невалидные строки: отклонить файл целиком или применить валидную часть. Оба варианта технически возможны, но дают противоположный ожидаемый результат и разные правила восстановления данных.
+It does not specify what `Confirm` should do when one file contains both valid and invalid rows: reject the entire file or apply only the valid subset. Both approaches are technically possible, but they create opposite expected results and different recovery rules.
 
-Правильное поведение Evidence-First QA Copilot — создать `QA Context Brief` со статусом `Needs answers`, а не выдумать правило и продолжить с тест-планом.
+The correct Evidence-First QA Copilot behavior is to produce a `QA Context Brief` with `Needs answers`, rather than invent a rule and continue with a test plan.

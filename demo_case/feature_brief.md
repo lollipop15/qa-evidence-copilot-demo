@@ -1,38 +1,38 @@
-# Учебная функция: импорт задач из CSV
+# Synthetic feature: CSV task import
 
-## Цель
+## Goal
 
-Менеджер быстро загружает список задач в вымышленный Task Board, проверяет preview, подтверждает импорт и скачивает актуальную выгрузку.
+A manager quickly uploads a task list to a fictional Task Board, reviews the preview, confirms the import, and downloads the current export.
 
-## Пользовательский поток
+## User flow
 
-1. Пользователь с ролью `manager` выбирает CSV UTF-8 с заголовками `task_id,title,priority,due_date`.
-2. Система показывает preview каждой строки: `accepted` или `rejected` с понятной причиной.
-3. Пока пользователь не нажал `Confirm`, сохранённые задачи не меняются.
-4. После успешного `Confirm` список и `Export` отражают новое состояние.
+1. A user with the `manager` role selects a UTF-8 CSV with the headers `task_id,title,priority,due_date`.
+2. The system shows a preview for every row: `accepted` or `rejected`, with a clear reason.
+3. Stored tasks do not change until the user selects `Confirm`.
+4. After a successful `Confirm`, both the task list and `Export` reflect the new state.
 
-## Согласованные бизнес-правила
+## Agreed business rules
 
-| Правило | Ожидаемое поведение |
+| Rule | Expected behavior |
 | --- | --- |
-| Формат файла | Ровно четыре заголовка: `task_id`, `title`, `priority`, `due_date`. Пустой файл, отсутствующий или лишний заголовок отклоняется. |
-| Идентификатор и заголовок | `task_id` и `title` обязательны; пробелы по краям обрезаются. Пустое значение после обрезки невалидно. |
-| Приоритет | Поле обязательно и строго принимает только `low`, `medium`, `high`. |
-| Срок | Поле обязательно, формат `YYYY-MM-DD`; допустим диапазон от текущей UTC-даты до `UTC today + 365` дней включительно. |
-| Нормализация ID | `task_id` нормализуется в верхний регистр. Два одинаковых нормализованных ID в одном файле делают весь файл невалидным. |
-| Атомарность | Если preview содержит хотя бы одну `rejected` строку, `Confirm` заблокирован. Никакая строка этого файла не создаётся и не обновляется. |
-| Создание и обновление | Валидная строка с новым `task_id` создаёт задачу; с существующим — заменяет `title`, `priority` и `due_date`. |
-| Повторная загрузка | Повторная загрузка идентичного валидного файла создаёт новый preview; его успешный Confirm сохраняет тот же итоговый набор задач без дублей. |
-| Жизненный цикл preview | Успешный Confirm расходует preview. Повтор того же Confirm, stale preview или изменение исходного состояния отклоняются с сообщением `Preview expired; upload again` и не меняют данные. |
-| Авторизация | Только `manager` может подтверждать импорт. Сервер отклоняет попытку другой роли без изменений данных. |
-| Export | UTF-8 CSV с четырьмя колонками в порядке `task_id,title,priority,due_date`; строки отсортированы по `task_id`; экспорт не меняет данные. |
-| Локализация | Все видимые подписи, причины валидации и ошибки авторизации доступны на English и Russian. Формат данных в CSV от языка интерфейса не зависит. |
+| File format | Exactly four headers: `task_id`, `title`, `priority`, `due_date`. An empty file or a file with a missing or extra header is rejected. |
+| ID and title | `task_id` and `title` are required; leading and trailing whitespace is trimmed. A value blank after trimming is invalid. |
+| Priority | The field is required and accepts only `low`, `medium`, or `high`. |
+| Due date | The field is required and uses `YYYY-MM-DD`; the allowed range is from the current UTC date through `UTC today + 365` inclusive. |
+| ID normalization | `task_id` is normalized to uppercase. Two identical normalized IDs in one file invalidate the entire file. |
+| Atomicity | If preview contains at least one `rejected` row, `Confirm` is unavailable. No row from that file is created or updated. |
+| Create and update | A valid row with a new `task_id` creates a task; a row with an existing ID replaces `title`, `priority`, and `due_date`. |
+| Re-upload | Re-uploading an identical valid file creates a fresh preview. Confirming that fresh preview persists the same final task set without duplicates. |
+| Preview lifecycle | A successful `Confirm` consumes the preview. Replaying the same confirmation, confirming a stale preview, or confirming after the source state changed is rejected with `Preview expired; upload again` and must not mutate data. |
+| Authorization | Only a `manager` can confirm an import. The server rejects another role’s attempt without changing data. |
+| Export | A UTF-8 CSV with four columns in `task_id,title,priority,due_date` order; rows are sorted by `task_id`; export does not mutate data. |
+| Localization | All visible labels, validation reasons, and authorization errors are available in English and Russian. The CSV data format is independent of the UI language. |
 
-## Вне scope
+## Out of scope
 
-Совместное редактирование задач, массовое удаление, лимиты размера файла, SLA производительности и интеграции с внешними сервисами.
+Collaborative task editing, bulk deletion, file-size limits, performance SLAs, and integrations with external services.
 
-## Учебные входные файлы
+## Synthetic input files
 
-- [valid_tasks.csv](fixtures/valid_tasks.csv) — валидный импорт.
-- [mixed_invalid_tasks.csv](fixtures/mixed_invalid_tasks.csv) — демонстрация атомарной блокировки Confirm.
+- [valid_tasks.csv](fixtures/valid_tasks.csv) — valid import.
+- [mixed_invalid_tasks.csv](fixtures/mixed_invalid_tasks.csv) — demonstrates the atomic `Confirm` block.
