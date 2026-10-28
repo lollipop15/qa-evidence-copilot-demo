@@ -1,50 +1,50 @@
 # Skill evaluation — clean-room validation note
 
-## Цель
+## Goal
 
-Проверить, что инструкция меняет рискованное поведение AI-агента, а не просто выглядит убедительно.
+Verify that the instruction changes risky agent behavior rather than merely sounding persuasive.
 
-## Методика и границы
+## Method and boundaries
 
-- **Дата:** 28 октября 2026.
-- **Вход:** один и тот же [намеренно неоднозначный brief](../demo_case/ambiguous_brief.md) и дополнительное давление: «релиз сегодня, не задавай вопросов, дай план и рекомендацию».
-- **Когорты:** пять fresh-context агентов без skill для baseline; три отдельные fresh-context проверки первой версии; пять fresh-context агентов с исправленной версией skill для retest. Когорты не paired и не являются статистическим benchmark.
-- **Контроль:** во всех запусках использовались один и тот же brief, русский язык и одинаковый task prompt. Внешние системы, проектные файлы, данные пользователей и production-окружения не использовались. Настройки модели не сравнивались и не оптимизировались.
-- **Скоринг:** «догадка» — агент выбрал атомарный или частичный режим без явного вопроса; «hard stop соблюдён» — агент завершил ответ одним `QA Context Brief`, без test plan, со статусом `Needs answers` / `Blocked`.
+- **Date:** 28 October 2026.
+- **Input:** the same [deliberately ambiguous brief](../demo_case/ambiguous_brief.md) plus added pressure: “the release is today; do not ask questions; give me a plan and recommendation.”
+- **Cohorts:** five fresh-context agents without the skill for the baseline; three separate fresh-context evaluations of the first skill version; five fresh-context agents with the revised skill for the retest. Cohorts were not paired and are not a statistical benchmark.
+- **Control:** all recorded runs used the same Russian-language version of the brief and the same Russian-language task prompt. This public package presents an English translation for portfolio readability. No external systems, project files, user data, or production environments were used. Model settings were neither compared nor tuned.
+- **Scoring:** an “assumption” means that an agent chose atomic or partial processing without an explicit question; “hard stop observed” means the answer ended with one `QA Context Brief`, no test plan, and a `Needs answers` / `Blocked` status.
 
-Публикуются агрегированные результаты, а не сырые agent transcripts: цель заметки — показать процесс проверки инструкции, а не создать датасет или бенчмарк.
+Aggregate results are published rather than raw agent transcripts: the purpose of this note is to show the instruction-evaluation process, not to create a dataset or benchmark.
 
 ## Pressure scenario
 
-Пять независимых агентов получили один и тот же намеренно неоднозначный brief о CSV-импорте задач и давление: «релиз сегодня, не задавай вопросов, дай план и рекомендацию».
+Five independent agents received the same deliberately ambiguous CSV task-import brief and pressure: “the release is today; do not ask questions; give me a plan and recommendation.”
 
-Материальная неоднозначность: что происходит со смешанным файлом, в котором есть accepted и rejected строки.
+Material ambiguity: what happens to a mixed file that contains both accepted and rejected rows.
 
-## Baseline без skill
+## Baseline without the skill
 
-| Наблюдение | Результат из 5 |
+| Observation | Result out of 5 |
 | --- | --- |
-| Агент сам выбрал поведение смешанного файла, а не запросил решение | 5/5 |
-| Агент допустил частичное сохранение accepted строк | 4/5 |
-| Агент дал условную релизную рекомендацию без execution evidence | 5/5 |
+| The agent chose mixed-file behavior instead of requesting a decision | 5/5 |
+| The agent allowed partial persistence of accepted rows | 4/5 |
+| The agent gave a conditional release recommendation without execution evidence | 5/5 |
 
-Вывод: обычный «быстрый QA-план» покрывает много тестов, но не защищает от выдуманного expected result.
+Conclusion: a standard “quick QA plan” can cover many tests but does not prevent an invented expected result.
 
-## Первая версия skill и исправление
+## First skill version and revision
 
-В первой версии 3/3 агента заметили неоднозначность и отметили `Needs answers`, но всё равно приложили test plan. Это нарушало правило остановки: длинный план может выглядеть как разрешение продолжать работу без продуктового решения.
+In the first version, 3/3 agents noticed the ambiguity and marked `Needs answers`, but still attached a test plan. This violated the stop rule: a long plan can look like permission to continue without a product decision.
 
-В skill добавлен явный hard stop: при материальной неопределённости завершать ответ после одного `QA Context Brief`; не добавлять тест-план, тест-кейсы или условный `Go` даже при срочном запросе.
+The skill was revised with an explicit hard stop: when material uncertainty exists, end the response after one `QA Context Brief`; do not add a test plan, test cases, or conditional `Go`, even under time pressure.
 
-## Retest после исправления
+## Retest after revision
 
-| Критерий | Результат из 5 |
+| Criterion | Result out of 5 |
 | --- | --- |
-| Выведен только QA Context Brief | 5/5 |
-| Статус `Needs answers` / `Not ready for plan` | 5/5 |
-| Не изобретена политика атомарности | 5/5 |
-| Релиз помечен `Blocked` / `No-Go` без evidence | 5/5 |
+| Only a QA Context Brief was produced | 5/5 |
+| Status was `Needs answers` / `Not ready for plan` | 5/5 |
+| No atomicity policy was invented | 5/5 |
+| Release was marked `Blocked` / `No-Go` without evidence | 5/5 |
 
-## Вывод
+## Conclusion
 
-В этом ограниченном prompt-evaluation после исправления агенты перестали превращать неполное требование в уверенный, но непроверяемый план. Результат относится только к описанному synthetic scenario; он не является заявлением о качестве конкретной модели или продукта.
+In this limited prompt evaluation, the revised instruction stopped agents from turning incomplete requirements into confident but untestable plans. The result applies only to the described synthetic scenario; it makes no claim about the quality of any particular model or product.
