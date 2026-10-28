@@ -1,17 +1,17 @@
 # QA Result — synthetic demonstration
 
-> **Важно:** это учебный отчёт на полностью synthetic evidence. Он демонстрирует форму evidence-first QA и не утверждает наличие дефекта в каком-либо реальном продукте.
+> **Important:** this is a synthetic report based entirely on synthetic evidence. It illustrates the form of evidence-first QA reporting and does not claim a defect in any real product.
 
-**Feature:** учебный CSV-импорт задач<br>
+**Feature:** synthetic CSV task import<br>
 **Test plan:** [risk_based_test_plan.md](risk_based_test_plan.md)<br>
 **Environment:** isolated synthetic demo<br>
-**Status:** `Fail`
+**Overall verdict:** `Fail`
 
 ## Executive summary
 
-Показательный P0-сценарий TS-005 выявил нарушение согласованной атомарности: в файле с одной accepted и одной rejected строкой система сохранила accepted задачу. По учебному brief `Confirm` обязан быть недоступен при любой rejected строке и не менять данные целиком.
+The illustrative P0 scenario TS-005 shows a breach of the agreed atomicity rule: a file with one accepted and one rejected row persisted the accepted task. The synthetic brief requires `Confirm` to be unavailable whenever any row is rejected and prohibits all data changes.
 
-Другие сценарии в этом пакете не исполнялись. Это корректно отражено как `Not executed`, а не замаскировано общим «успехом».
+Other scenarios in this package were not executed. That is accurately reported as `Not executed` rather than hidden behind an overall “success”.
 
 ## Plan coverage matrix
 
@@ -53,7 +53,7 @@
 
 ### Scope and next action
 
-This can create a partial import that the user did not approve. Keep release status `Fail` until the server enforces the atomicity rule and TS-005 is rerun with a clean snapshot.
+In the synthetic case, this could create a partial import that the user did not approve. Keep release status `Fail` until the server enforces the atomicity rule and TS-005 is rerun with a clean snapshot.
 
 ## Residual risk
 
